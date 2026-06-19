@@ -126,21 +126,18 @@ class CallActivity : SimpleActivity() {
     }
 
     private fun initButtons() = binding.apply {
-        if (config.disableSwipeToAnswer) {
-            callDraggable.beGone()
-            callDraggableBackground.beGone()
-            callLeftArrow.beGone()
-            callRightArrow.beGone()
+        // Always use click-to-answer layout for accessibility, no swipe or slide allowed
+        callDraggable.beGone()
+        callDraggableBackground.beGone()
+        callLeftArrow.beGone()
+        callRightArrow.beGone()
 
-            callDecline.setOnClickListener {
-                endCall()
-            }
+        callDecline.setOnClickListener {
+            endCall()
+        }
 
-            callAccept.setOnClickListener {
-                acceptCall()
-            }
-        } else {
-            handleSwipe()
+        callAccept.setOnClickListener {
+            acceptCall()
         }
 
         callToggleMicrophone.setOnClickListener {
@@ -157,6 +154,10 @@ class CallActivity : SimpleActivity() {
 
         dialpadClose.setOnClickListener {
             hideDialpad()
+        }
+
+        dialpadToggleSpeaker.setOnClickListener {
+            changeCallAudioRoute()
         }
 
         callToggleHold.setOnClickListener {
@@ -232,7 +233,7 @@ class CallActivity : SimpleActivity() {
             }
         )
 
-        arrayOf(dialpadClose, callSimImage, dialpadClearChar).forEach {
+        arrayOf(dialpadClose, callSimImage, dialpadClearChar, dialpadToggleSpeaker).forEach {
             it.applyColorFilter(getProperTextColor())
         }
 
@@ -487,7 +488,22 @@ class CallActivity : SimpleActivity() {
                     setImageResource(route.iconRes)
                 }
             }
+
+            binding.dialpadToggleSpeaker.apply {
+                val bluetoothConnected = supportedAudioRoutes.contains(AudioRoute.BLUETOOTH)
+                contentDescription = if (bluetoothConnected) {
+                    getString(R.string.choose_audio_route)
+                } else {
+                    getString(if (isSpeakerOn) R.string.turn_speaker_off else R.string.turn_speaker_on)
+                }
+                if (route == AudioRoute.WIRED_HEADSET) {
+                    setImageResource(R.drawable.ic_volume_down_vector)
+                } else {
+                    setImageResource(route.iconRes)
+                }
+            }
             toggleButtonColor(binding.callToggleSpeaker, enabled = route != AudioRoute.EARPIECE && route != AudioRoute.WIRED_HEADSET)
+            toggleButtonColor(binding.dialpadToggleSpeaker, enabled = route != AudioRoute.EARPIECE && route != AudioRoute.WIRED_HEADSET)
             createOrUpdateAudioRouteChooser(supportedAudioRoutes, create = false)
 
             if (isSpeakerOn) {
@@ -516,14 +532,14 @@ class CallActivity : SimpleActivity() {
 
     private fun findVisibleViewsUnderDialpad(): Sequence<Pair<View, Float>> {
         return binding.ongoingCallHolder.children
-            .filter { it is ImageView && it.isVisible() }
+            .filter { it.isVisible() }
             .map { view -> Pair(view, view.alpha) }
     }
 
     private fun showDialpad() {
         binding.dialpadWrapper.apply {
             updatePadding(
-                bottom = binding.root.bottom - binding.callEnd.top + resources.getDimensionPixelSize(R.dimen.activity_margin)
+                bottom = binding.root.bottom - binding.bottomActionsContainer.top + resources.getDimensionPixelSize(R.dimen.activity_margin)
             )
 
             translationY = dialpadHeight
@@ -671,7 +687,7 @@ class CallActivity : SimpleActivity() {
                 callStatusLabel.text = getString(statusTextId)
             }
 
-            callManage.beVisibleIf(!isCallEnded && call.hasCapability(Call.Details.CAPABILITY_MANAGE_CONFERENCE))
+            callManageHolder.beVisibleIf(!isCallEnded && call.hasCapability(Call.Details.CAPABILITY_MANAGE_CONFERENCE))
             setActionButtonEnabled(callSwap, enabled = !isCallEnded && state == Call.STATE_ACTIVE)
             setActionButtonEnabled(callMerge, enabled = !isCallEnded && state == Call.STATE_ACTIVE)
         }
@@ -733,18 +749,19 @@ class CallActivity : SimpleActivity() {
         enableProximitySensor()
         binding.incomingCallHolder.beGone()
         binding.ongoingCallHolder.beVisible()
-        binding.callEnd.beVisible()
+        binding.bottomActionsContainer.beVisible()
     }
 
     private fun callRinging() {
         binding.incomingCallHolder.beVisible()
+        binding.bottomActionsContainer.beGone()
     }
 
     private fun callStarted() {
         enableProximitySensor()
         binding.incomingCallHolder.beGone()
         binding.ongoingCallHolder.beVisible()
-        binding.callEnd.beVisible()
+        binding.bottomActionsContainer.beVisible()
         callDurationHandler.removeCallbacks(updateCallDurationTask)
         callDurationHandler.post(updateCallDurationTask)
     }
@@ -870,11 +887,22 @@ class CallActivity : SimpleActivity() {
     }
 
     private fun disableAllActionButtons() {
-        (binding.ongoingCallHolder.children + binding.callEnd)
-            .filter { it is ImageView && it.isVisible() }
-            .forEach { view ->
-                setActionButtonEnabled(button = view as ImageView, enabled = false)
+        val buttons = listOf(
+            binding.callToggleMicrophone,
+            binding.callToggleSpeaker,
+            binding.callDialpad,
+            binding.callToggleHold,
+            binding.callAdd,
+            binding.callManage,
+            binding.callSwap,
+            binding.callMerge,
+            binding.callEnd
+        )
+        buttons.forEach { button ->
+            if (button.isVisible()) {
+                setActionButtonEnabled(button = button, enabled = false)
             }
+        }
     }
 
     private fun setActionButtonEnabled(button: ImageView, enabled: Boolean) {

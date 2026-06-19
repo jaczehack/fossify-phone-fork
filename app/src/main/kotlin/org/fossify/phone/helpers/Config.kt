@@ -113,7 +113,7 @@ class Config(context: Context) : BaseConfig(context) {
         set(disableProximitySensor) = prefs.edit().putBoolean(DISABLE_PROXIMITY_SENSOR, disableProximitySensor).apply()
 
     var disableSwipeToAnswer: Boolean
-        get() = prefs.getBoolean(DISABLE_SWIPE_TO_ANSWER, false)
+        get() = prefs.getBoolean(DISABLE_SWIPE_TO_ANSWER, true)
         set(disableSwipeToAnswer) = prefs.edit().putBoolean(DISABLE_SWIPE_TO_ANSWER, disableSwipeToAnswer).apply()
 
     var wasOverlaySnackbarConfirmed: Boolean
@@ -133,6 +133,6 @@ class Config(context: Context) : BaseConfig(context) {
         set(dialpadBeeps) = prefs.edit().putBoolean(DIALPAD_BEEPS, dialpadBeeps).apply()
 
     var alwaysShowFullscreen: Boolean
-        get() = prefs.getBoolean(ALWAYS_SHOW_FULLSCREEN, false)
+        get() = prefs.getBoolean(ALWAYS_SHOW_FULLSCREEN, true)
         set(alwaysShowFullscreen) = prefs.edit().putBoolean(ALWAYS_SHOW_FULLSCREEN, alwaysShowFullscreen).apply()
 }

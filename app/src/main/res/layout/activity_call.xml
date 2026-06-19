@@ -179,7 +179,7 @@
         android:layout_height="0dp"
         android:layout_marginVertical="@dimen/activity_margin"
         android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@id/call_end"
+        app:layout_constraintBottom_toTopOf="@id/bottom_actions_container"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHeight_max="@dimen/call_control_max_height"
         app:layout_constraintStart_toStartOf="parent"
@@ -192,7 +192,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginHorizontal="@dimen/medium_margin"
-            app:constraint_referenced_ids="call_toggle_microphone,call_toggle_speaker,call_dialpad,call_toggle_hold,call_add,call_manage,call_swap,call_merge"
+            app:constraint_referenced_ids="call_toggle_microphone_holder,call_dialpad_holder,call_toggle_hold_holder,call_add_holder,call_manage_holder,call_swap_holder,call_merge_holder"
             app:flow_horizontalGap="@dimen/activity_margin"
             app:flow_maxElementsWrap="3"
             app:flow_verticalGap="@dimen/activity_margin"
@@ -202,101 +202,175 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:id="@+id/call_toggle_microphone"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:background="@drawable/circle_background"
-            android:contentDescription="@string/turn_microphone_off"
-            android:padding="@dimen/activity_margin"
-            android:src="@drawable/ic_microphone_off_vector"
-            app:layout_constraintDimensionRatio="1:1"
-            app:layout_constraintHeight_max="@dimen/call_control_button_size" />
+        <LinearLayout
+            android:id="@+id/call_toggle_microphone_holder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center">
+            <ImageView
+                android:id="@+id/call_toggle_microphone"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@drawable/circle_background"
+                android:contentDescription="@string/turn_microphone_off"
+                android:padding="14dp"
+                android:src="@drawable/ic_microphone_off_vector" />
+            <org.fossify.commons.views.MyTextView
+                android:id="@+id/call_toggle_microphone_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="@string/mute"
+                android:textSize="14sp" />
+        </LinearLayout>
 
-        <ImageView
-            android:id="@+id/call_toggle_speaker"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:background="@drawable/circle_background"
-            android:contentDescription="@string/turn_speaker_on"
-            android:padding="@dimen/activity_margin"
-            android:src="@drawable/ic_volume_up_vector"
-            app:layout_constraintDimensionRatio="1:1"
-            app:layout_constraintHeight_max="@dimen/call_control_button_size" />
+        <LinearLayout
+            android:id="@+id/call_dialpad_holder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center">
+            <ImageView
+                android:id="@+id/call_dialpad"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@drawable/circle_button_background_ripple"
+                android:contentDescription="@string/show_dialpad"
+                android:padding="14dp"
+                android:src="@drawable/ic_dialpad_vector" />
+            <org.fossify.commons.views.MyTextView
+                android:id="@+id/call_dialpad_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="@string/dialpad"
+                android:textSize="14sp" />
+        </LinearLayout>
 
-        <ImageView
-            android:id="@+id/call_dialpad"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:background="@drawable/circle_button_background_ripple"
-            android:contentDescription="@string/show_dialpad"
-            android:padding="@dimen/activity_margin"
-            android:src="@drawable/ic_dialpad_vector"
-            app:layout_constraintHeight_max="@dimen/call_control_button_size" />
+        <LinearLayout
+            android:id="@+id/call_toggle_hold_holder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center">
+            <ImageView
+                android:id="@+id/call_toggle_hold"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@drawable/circle_background"
+                android:contentDescription="@string/hold_call"
+                android:padding="14dp"
+                android:src="@drawable/ic_pause_vector" />
+            <org.fossify.commons.views.MyTextView
+                android:id="@+id/call_toggle_hold_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="@string/hold"
+                android:textSize="14sp" />
+        </LinearLayout>
 
-        <ImageView
-            android:id="@+id/call_toggle_hold"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:background="@drawable/circle_background"
-            android:contentDescription="@string/hold_call"
-            android:padding="@dimen/activity_margin"
-            android:src="@drawable/ic_pause_vector"
-            app:layout_constraintDimensionRatio="1:1"
-            app:layout_constraintHeight_max="@dimen/call_control_button_size" />
+        <LinearLayout
+            android:id="@+id/call_add_holder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center">
+            <ImageView
+                android:id="@+id/call_add"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@drawable/circle_button_background_ripple"
+                android:contentDescription="@string/call_add"
+                android:padding="14dp"
+                android:src="@drawable/ic_add_call_vector" />
+            <org.fossify.commons.views.MyTextView
+                android:id="@+id/call_add_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="@string/call_add"
+                android:textSize="14sp" />
+        </LinearLayout>
 
-        <ImageView
-            android:id="@+id/call_add"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:background="@drawable/circle_button_background_ripple"
-            android:contentDescription="@string/call_add"
-            android:padding="@dimen/activity_margin"
-            android:src="@drawable/ic_add_call_vector"
-            app:layout_constraintDimensionRatio="1:1"
-            app:layout_constraintHeight_max="@dimen/call_control_button_size" />
-
-        <ImageView
-            android:id="@+id/call_manage"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:background="@drawable/circle_button_background_ripple"
-            android:contentDescription="@string/conference_manage"
-            android:padding="@dimen/activity_margin"
-            android:src="@drawable/ic_people_vector"
+        <LinearLayout
+            android:id="@+id/call_manage_holder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
             android:visibility="gone"
-            app:layout_constraintDimensionRatio="1:1"
-            app:layout_constraintHeight_max="@dimen/call_control_button_size"
-            tools:visibility="visible" />
+            tools:visibility="visible">
+            <ImageView
+                android:id="@+id/call_manage"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@drawable/circle_button_background_ripple"
+                android:contentDescription="@string/conference_manage"
+                android:padding="14dp"
+                android:src="@drawable/ic_people_vector" />
+            <org.fossify.commons.views.MyTextView
+                android:id="@+id/call_manage_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="@string/manage"
+                android:textSize="14sp" />
+        </LinearLayout>
 
-        <ImageView
-            android:id="@+id/call_swap"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:background="@drawable/circle_button_background_ripple"
-            android:contentDescription="@string/call_swap"
-            android:padding="@dimen/activity_margin"
-            android:src="@drawable/ic_call_swap_vector"
-            app:layout_constraintDimensionRatio="1:1"
-            app:layout_constraintHeight_max="@dimen/call_control_button_size" />
+        <LinearLayout
+            android:id="@+id/call_swap_holder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center">
+            <ImageView
+                android:id="@+id/call_swap"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@drawable/circle_button_background_ripple"
+                android:contentDescription="@string/call_swap"
+                android:padding="14dp"
+                android:src="@drawable/ic_call_swap_vector" />
+            <org.fossify.commons.views.MyTextView
+                android:id="@+id/call_swap_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="@string/swap"
+                android:textSize="14sp" />
+        </LinearLayout>
 
-        <ImageView
-            android:id="@+id/call_merge"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:background="@drawable/circle_button_background_ripple"
-            android:contentDescription="@string/call_merge"
-            android:padding="@dimen/activity_margin"
-            android:src="@drawable/ic_call_merge_vector"
-            app:layout_constraintDimensionRatio="1:1"
-            app:layout_constraintHeight_max="@dimen/call_control_button_size" />
+        <LinearLayout
+            android:id="@+id/call_merge_holder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center">
+            <ImageView
+                android:id="@+id/call_merge"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@drawable/circle_button_background_ripple"
+                android:contentDescription="@string/call_merge"
+                android:padding="14dp"
+                android:src="@drawable/ic_call_merge_vector" />
+            <org.fossify.commons.views.MyTextView
+                android:id="@+id/call_merge_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="@string/merge"
+                android:textSize="14sp" />
+        </LinearLayout>
 
         <androidx.constraintlayout.widget.Group
             android:id="@+id/controls_single_call"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="gone"
-            app:constraint_referenced_ids="call_toggle_hold,call_add"
+            app:constraint_referenced_ids="call_toggle_hold_holder,call_add_holder"
             tools:visibility="visible" />
 
         <androidx.constraintlayout.widget.Group
@@ -304,7 +378,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="gone"
-            app:constraint_referenced_ids="call_swap,call_merge" />
+            app:constraint_referenced_ids="call_swap_holder,call_merge_holder" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -315,122 +389,104 @@
         android:visibility="gone"
         tools:visibility="gone">
 
-        <ImageView
-            android:id="@+id/call_decline"
-            android:layout_width="@dimen/incoming_call_button_size"
-            android:layout_height="@dimen/incoming_call_button_size"
-            android:clickable="false"
-            android:contentDescription="@string/decline_call"
-            android:padding="@dimen/medium_margin"
-            android:src="@drawable/ic_call_end"
-            app:layout_constraintBottom_toBottomOf="@+id/call_draggable"
-            app:layout_constraintEnd_toStartOf="@+id/call_draggable"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/call_draggable"
-            app:layout_constraintVertical_bias="0.85" />
-
-        <org.fossify.commons.views.MyTextView
-            android:id="@+id/call_decline_label"
+        <!-- Decline Button and Label -->
+        <LinearLayout
+            android:id="@+id/call_decline_holder"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/normal_margin"
-            android:text="@string/decline"
-            android:textSize="@dimen/bigger_text_size"
-            app:layout_constraintEnd_toEndOf="@+id/call_decline"
-            app:layout_constraintStart_toStartOf="@+id/call_decline"
-            app:layout_constraintTop_toBottomOf="@+id/call_decline" />
-
-        <ImageView
-            android:id="@+id/call_left_arrow"
-            android:layout_width="@dimen/incoming_call_arrow_size"
-            android:layout_height="@dimen/incoming_call_arrow_size"
-            android:layout_marginBottom="@dimen/activity_margin"
-            android:alpha="0.2"
-            android:contentDescription="@null"
-            android:padding="@dimen/medium_margin"
-            android:src="@drawable/ic_chevron_left_vector"
+            android:orientation="vertical"
+            android:gravity="center"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/call_accept"
-            app:layout_constraintHorizontal_bias="0.15"
-            app:layout_constraintStart_toEndOf="@+id/call_decline"
+            app:layout_constraintEnd_toStartOf="@+id/call_accept_holder"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.8375" />
+            app:layout_constraintVertical_bias="0.85">
+
+            <ImageView
+                android:id="@+id/call_decline"
+                android:layout_width="110dp"
+                android:layout_height="110dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:contentDescription="@string/decline_call"
+                android:src="@drawable/ic_call_end" />
+
+            <org.fossify.commons.views.MyTextView
+                android:id="@+id/call_decline_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/decline"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <!-- Accept Button and Label -->
+        <LinearLayout
+            android:id="@+id/call_accept_holder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/call_decline_holder"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.85">
+
+            <ImageView
+                android:id="@+id/call_accept"
+                android:layout_width="110dp"
+                android:layout_height="110dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:contentDescription="@string/accept_call"
+                android:src="@drawable/ic_call_accept" />
+
+            <org.fossify.commons.views.MyTextView
+                android:id="@+id/call_accept_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/accept"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <!-- Dummy views to satisfy ViewBinding generated fields without compile errors -->
+        <ImageView
+            android:id="@+id/call_draggable"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="gone"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <ImageView
             android:id="@+id/call_draggable_background"
-            android:layout_width="@dimen/incoming_call_button_size"
-            android:layout_height="@dimen/incoming_call_button_size"
-            android:layout_marginBottom="@dimen/activity_margin"
-            android:alpha="0.2"
-            android:contentDescription="@null"
-            android:padding="@dimen/medium_margin"
-            android:src="@drawable/pulsing_background"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/call_accept"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/call_decline"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="gone"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.85" />
+            app:layout_constraintStart_toStartOf="parent" />
 
         <ImageView
-            android:id="@+id/call_draggable"
-            android:layout_width="@dimen/incoming_call_button_size"
-            android:layout_height="@dimen/incoming_call_button_size"
-            android:layout_marginBottom="@dimen/activity_margin"
-            android:contentDescription="@string/decline_call"
-            android:padding="@dimen/activity_margin"
-            android:src="@drawable/ic_phone_down_vector"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/call_accept"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/call_decline"
+            android:id="@+id/call_left_arrow"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="gone"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.85" />
+            app:layout_constraintStart_toStartOf="parent" />
 
         <ImageView
             android:id="@+id/call_right_arrow"
-            android:layout_width="@dimen/incoming_call_arrow_size"
-            android:layout_height="@dimen/incoming_call_arrow_size"
-            android:layout_marginBottom="@dimen/activity_margin"
-            android:alpha="0.2"
-            android:contentDescription="@null"
-            android:padding="@dimen/medium_margin"
-            android:src="@drawable/ic_chevron_right_vector"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/call_accept"
-            app:layout_constraintHorizontal_bias="0.85"
-            app:layout_constraintStart_toEndOf="@+id/call_decline"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="gone"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.8375" />
-
-        <ImageView
-            android:id="@+id/call_accept"
-            android:layout_width="@dimen/incoming_call_button_size"
-            android:layout_height="@dimen/incoming_call_button_size"
-            android:clickable="false"
-            android:contentDescription="@string/accept_call"
-            android:elevation="@dimen/medium_margin"
-            android:padding="@dimen/medium_margin"
-            android:src="@drawable/ic_call_accept"
-            app:layout_constraintBottom_toBottomOf="@+id/call_draggable"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/call_draggable"
-            app:layout_constraintTop_toTopOf="@+id/call_draggable"
-            app:layout_constraintVertical_bias="0.85" />
-
-        <org.fossify.commons.views.MyTextView
-            android:id="@+id/call_accept_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/normal_margin"
-            android:elevation="@dimen/medium_margin"
-            android:text="@string/accept"
-            android:textSize="@dimen/bigger_text_size"
-            app:layout_constraintEnd_toEndOf="@+id/call_accept"
-            app:layout_constraintStart_toStartOf="@+id/call_accept"
-            app:layout_constraintTop_toBottomOf="@+id/call_accept" />
+            app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -471,13 +527,27 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/medium_margin"
                 android:layout_marginEnd="@dimen/medium_margin"
-                android:layout_toEndOf="@id/dialpad_close"
+                android:layout_toEndOf="@id/dialpad_toggle_speaker"
                 android:layout_toStartOf="@+id/dialpad_clear_char"
                 android:gravity="center"
                 android:inputType="phone"
                 android:textCursorDrawable="@null"
                 android:textSize="@dimen/dialpad_text_size"
                 tools:ignore="SpUsage" />
+
+            <ImageView
+                android:id="@+id/dialpad_toggle_speaker"
+                android:layout_width="@dimen/normal_icon_size"
+                android:layout_height="@dimen/normal_icon_size"
+                android:layout_alignTop="@+id/dialpad_input"
+                android:layout_alignBottom="@+id/dialpad_input"
+                android:layout_toEndOf="@+id/dialpad_close"
+                android:layout_centerVertical="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/turn_speaker_on"
+                android:elevation="@dimen/medium_margin"
+                android:padding="@dimen/medium_margin"
+                android:src="@drawable/ic_volume_up_vector" />
 
             <ImageView
                 android:id="@+id/dialpad_clear_char"
@@ -501,18 +571,77 @@
 
     </LinearLayout>
 
-    <ImageView
-        android:id="@+id/call_end"
-        android:layout_width="@dimen/call_control_button_size"
-        android:layout_height="@dimen/call_control_button_size"
-        android:layout_marginBottom="@dimen/end_call_button_margin"
-        android:contentDescription="@string/end_call"
-        android:elevation="@dimen/big_margin"
-        android:src="@drawable/ic_call_end"
+    <LinearLayout
+        android:id="@+id/bottom_actions_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:orientation="horizontal"
+        android:gravity="center"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:visibility="visible" />
+        tools:visibility="visible">
+
+        <!-- Speaker Section -->
+        <LinearLayout
+            android:id="@+id/speaker_holder"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/call_toggle_speaker"
+                android:layout_width="110dp"
+                android:layout_height="110dp"
+                android:background="@drawable/circle_background"
+                android:contentDescription="@string/turn_speaker_on"
+                android:padding="28dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:src="@drawable/ic_volume_up_vector" />
+
+            <org.fossify.commons.views.MyTextView
+                android:id="@+id/call_toggle_speaker_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/audio_route_speaker"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <!-- Hang Up Section -->
+        <LinearLayout
+            android:id="@+id/hang_up_holder"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/call_end"
+                android:layout_width="110dp"
+                android:layout_height="110dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:contentDescription="@string/end_call"
+                android:src="@drawable/ic_call_end" />
+
+            <org.fossify.commons.views.MyTextView
+                android:id="@+id/call_end_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/end_call"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
