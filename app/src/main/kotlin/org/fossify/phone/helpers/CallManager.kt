@@ -96,7 +96,13 @@ class CallManager {
             }
         }
 
-        private fun getCallAudioState() = inCallService?.callAudioState
+        private fun getCallAudioState(): CallAudioState? {
+            return try {
+                inCallService?.callAudioState
+            } catch (_: Exception) {
+                null
+            }
+        }
 
         fun getSupportedAudioRoutes(): Array<AudioRoute> {
             return AudioRoute.values().filter {
@@ -112,7 +118,10 @@ class CallManager {
         fun getCallAudioRoute() = AudioRoute.fromRoute(getCallAudioState()?.route)
 
         fun setAudioRoute(newRoute: Int) {
-            inCallService?.setAudioRoute(newRoute)
+            try {
+                inCallService?.setAudioRoute(newRoute)
+            } catch (_: Exception) {
+            }
         }
 
         private fun updateState() {

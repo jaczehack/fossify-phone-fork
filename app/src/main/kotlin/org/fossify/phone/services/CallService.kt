@@ -32,61 +32,76 @@ class CallService : InCallService() {
     }
 
     override fun onCallAdded(call: Call) {
-        super.onCallAdded(call)
-        CallManager.onCallAdded(call)
-        CallManager.inCallService = this
-        call.registerCallback(callListener)
+        try {
+            super.onCallAdded(call)
+            CallManager.onCallAdded(call)
+            CallManager.inCallService = this
+            call.registerCallback(callListener)
 
-        // Incoming/Outgoing (locked): high priority (FSI)
-        // Incoming (unlocked): if user opted in, low priority ➜ manual activity start, otherwise high priority (FSI)
-        // Outgoing (unlocked): low priority ➜ manual activity start
-        val isIncoming = !call.isOutgoing()
-        val isDeviceLocked = !powerManager.isInteractive || keyguardManager.isDeviceLocked
-        val lowPriority = when {
-            isIncoming && isDeviceLocked -> false
-            !isIncoming && isDeviceLocked -> false
-            isIncoming && !isDeviceLocked -> config.alwaysShowFullscreen
-            else -> true
-        }
-
-        callNotificationManager.setupNotification(lowPriority)
-        if (
-            lowPriority
-            || !hasPermission(PERMISSION_POST_NOTIFICATIONS)
-            || !canUseFullScreenIntent()
-        ) {
-            try {
-                startActivity(CallActivity.getStartIntent(this))
-            } catch (_: Exception) {
-                // seems like startActivity can throw AndroidRuntimeException and
-                // ActivityNotFoundException, not yet sure when and why, lets show a notification
-                callNotificationManager.setupNotification()
+            // Incoming/Outgoing (locked): high priority (FSI)
+            // Incoming (unlocked): if user opted in, low priority ➜ manual activity start, otherwise high priority (FSI)
+            // Outgoing (unlocked): low priority ➜ manual activity start
+            val isIncoming = !call.isOutgoing()
+            val isDeviceLocked = !powerManager.isInteractive || keyguardManager.isDeviceLocked
+            val lowPriority = when {
+                isIncoming && isDeviceLocked -> false
+                !isIncoming && isDeviceLocked -> false
+                isIncoming && !isDeviceLocked -> config.alwaysShowFullscreen
+                else -> true
             }
+
+            callNotificationManager.setupNotification(lowPriority)
+            if (
+                lowPriority
+                || !hasPermission(PERMISSION_POST_NOTIFICATIONS)
+                || !canUseFullScreenIntent()
+            ) {
+                try {
+                    startActivity(CallActivity.getStartIntent(this))
+                } catch (_: Exception) {
+                    // seems like startActivity can throw AndroidRuntimeException and
+                    // ActivityNotFoundException, not yet sure when and why, lets show a notification
+                    callNotificationManager.setupNotification()
+                }
+            }
+        } catch (_: Exception) {
+            // Prevent unhandled exception from crashing InCallService and revoking default dialer role
         }
     }
 
     override fun onCallRemoved(call: Call) {
-        super.onCallRemoved(call)
-        call.unregisterCallback(callListener)
-        val wasPrimaryCall = call == CallManager.getPrimaryCall()
-        CallManager.onCallRemoved(call)
-        if (CallManager.getPhoneState() == NoCall) {
-            CallManager.inCallService = null
-            callNotificationManager.cancelNotification()
-        } else {
-            callNotificationManager.setupNotification()
-            if (wasPrimaryCall) {
-                startActivity(CallActivity.getStartIntent(this))
+        try {
+            super.onCallRemoved(call)
+            call.unregisterCallback(callListener)
+            val wasPrimaryCall = call == CallManager.getPrimaryCall()
+            CallManager.onCallRemoved(call)
+            if (CallManager.getPhoneState() == NoCall) {
+                CallManager.inCallService = null
+                callNotificationManager.cancelNotification()
+            } else {
+                callNotificationManager.setupNotification()
+                if (wasPrimaryCall) {
+                    try {
+                        startActivity(CallActivity.getStartIntent(this))
+                    } catch (_: Exception) {
+                    }
+                }
             }
-        }
 
-        EventBus.getDefault().post(Events.RefreshCallLog)
+            EventBus.getDefault().post(Events.RefreshCallLog)
+        } catch (_: Exception) {
+            // Prevent unhandled exception from crashing InCallService and revoking default dialer role
+        }
     }
 
     override fun onCallAudioStateChanged(audioState: CallAudioState?) {
         super.onCallAudioStateChanged(audioState)
         if (audioState != null) {
-            CallManager.onAudioStateChanged(audioState)
+            try {
+                CallManager.onAudioStateChanged(audioState)
+            } catch (_: Exception) {
+                // Prevent SecurityException or audio route error from unbinding service
+            }
         }
     }
 
